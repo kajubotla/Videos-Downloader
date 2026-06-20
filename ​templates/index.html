@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Video Downloader</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body { font-family: sans-serif; background-color: #ffffff; text-align: center; padding: 40px; }
+        .container { background: #fff; padding: 30px; border-radius: 12px; border: 1px solid #eee; display: inline-block; width: 400px; box-shadow: 0px 5px 15px rgba(0,0,0,0.1); }
+        h1 { color: #333; font-size: 24px; }
+        select, input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; }
+        button { width: 100%; padding: 12px; background-color: #27ae60; color: white; border: none; border-radius: 6px; font-size: 16px; cursor: pointer; }
+        .result-box { margin-top: 20px; padding: 15px; background: #f9f9f9; border-radius: 6px; text-align: left; }
+        .btn-link { display: block; margin: 5px 0; padding: 8px; background: #eee; text-decoration: none; color: #333; border-radius: 4px; font-size: 14px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1><i class="fas fa-download"></i> Video Downloader</h1>
+        <form method="POST">
+            <select name="platform">
+                <option value="youtube">YouTube</option>
+                <option value="facebook">Facebook</option>
+                <option value="tiktok">TikTok</option>
+            </select>
+            <input type="text" name="url" placeholder="Paste link here..." required>
+            <button type="submit">Get Download Links</button>
+        </form>
+
+        {% if video and not video.error %}
+        <div class="result-box">
+            <p><strong>Title:</strong> {{ video.title }}</p>
+            <p>Select Quality:</p>
+            {% for f in video.formats %}
+                {% if f.url and f.format_note %}
+                    <a href="{{ f.url }}" target="_blank" class="btn-link">{{ f.format_note }} ({{ f.ext }})</a>
+                {% endif %}
+            {% endfor %}
+        </div>
+        {% elif video.error %}
+            <p style="color:red;">Error: Could not fetch video. Please check the link.</p>
+        {% endif %}
+    </div>
+</body>
+</html>
+
